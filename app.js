@@ -8,6 +8,8 @@ let indexRouter = require('./routes/index');
 let usersRouter = require('./routes/users');
 let loginRouter = require('./routes/login');
 let fileRouter = require('./routes/files');
+let resetPasswordRouter = require('./routes/reset_password');
+let forgetPasswordRouter = require('./routes/forget_password');
 let app = express();
 
 // view engine setup
@@ -21,6 +23,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/login', loginRouter);
+app.use('/resetpassword', resetPasswordRouter);
+app.use('/forgetpassword', forgetPasswordRouter);
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

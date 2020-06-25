@@ -4,7 +4,7 @@ class Email{
     async sendPasswordMail(mailId,randomPass){
         try{
             let email = mailId.trim();
-            sgMail.setApiKey('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');
+            sgMail.setApiKey(process.env.SENDGRID_API_KEY);
             let msg = {
                 to: email,
                 from: 'no-reply@dhyio.com',
