@@ -1,16 +1,18 @@
-let createError = require('http-errors');
-let express = require('express');
-let path = require('path');
-let cookieParser = require('cookie-parser');
-let logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const graphqlHTTP = require('express-graphql');
+const schema = require('./schema/schema');
 
-let indexRouter = require('./routes/index');
-let usersRouter = require('./routes/users');
-let loginRouter = require('./routes/login');
-let fileRouter = require('./routes/files');
-let resetPasswordRouter = require('./routes/reset_password');
-let forgetPasswordRouter = require('./routes/forget_password');
-let app = express();
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const loginRouter = require('./routes/login');
+const fileRouter = require('./routes/files');
+const resetPasswordRouter = require('./routes/reset_password');
+const forgetPasswordRouter = require('./routes/forget_password');
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -21,6 +23,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/graphql', graphqlHTTP({
+  schema,
+  graphiql: true
+}));
 
 app.use('/login', loginRouter);
 app.use('/resetpassword', resetPasswordRouter);

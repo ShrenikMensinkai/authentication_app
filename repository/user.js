@@ -1,10 +1,5 @@
 const httperror = require('http-errors');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-const randomString = require("randomstring");
-
 const { User } = require('../models/user');
-// const {Email}   = require('../email/config_mail');
 
 class UserRepository{
     async getUserForLogin(email){
@@ -32,6 +27,16 @@ class UserRepository{
         try{
             let result = await User.create(user);
             return result.toObject();
+        }catch(error){
+            throw error;
+        }
+    }
+
+    async getUser(user_id){
+        try{
+            let condition = {'_id':user_id};
+            let result = await User.findOne(condition,{'password':0,'__v':0}).lean();
+            return result;
         }catch(error){
             throw error;
         }
