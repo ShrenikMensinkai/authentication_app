@@ -28,60 +28,14 @@ class UserRepository{
         }
     }
 
-    async forgotPassword(data){
+    async addUser(user){
         try{
-            let email = data.body.email;
-
-            let agency_result = await Agency.findOne({'agencyName':req.headers['host_origin']});
-            let Agency_id = agency_result.agencyId;
-
-            let userEmail = await User.findOne({"email" : email,"agencyId":Agency_id});
-            if(userEmail == 'undefined' || userEmail == null ){
-                return ({"message" : "User Email Not found"});
-            }else{
-                let randomPass = randomString.generate({
-                    length: 10,
-                    charset: 'alphanumeric'
-                });
-                let emailObj = new Email();
-                let hashedPassword = bcrypt.hashSync(randomPass, 8);
-                let result = await User.update({"email":userEmail.email},{"password":hashedPassword});
-                emailObj.resetpasswordMail(userEmail.email,randomPass);
-                return ({"message" : "Password sent to user mail"});
-            }
-        }catch(error) {
+            let result = await User.create(user);
+            return result.toObject();
+        }catch(error){
             throw error;
         }
     }
-
-   
-
-    async sendPassword(email){
-        try{
-            let userEmail = await User.findOne({"email" : email});
-            if(userEmail == 'undefined' || userEmail == null ){
-                return ({"message" : "User Email Not found"});
-            }else{
-                if(userEmail.password==null){
-                    let randomPass = randomString.generate({
-                        length: 10,
-                        charset: 'alphanumeric'
-                    });
-                    let emailObj = new Email();
-                    let hashedPassword = bcrypt.hashSync(randomPass, 8);
-                    let result = await User.update({"email":userEmail.email},{"password":hashedPassword});
-                    emailObj.resetpasswordMail(userEmail.email,randomPass);
-                    return ({"message" : "Password sent to user mail"});
-                }
-                else{
-                    return ({"message" : "User Email already Registered"});
-                }
-            }
-        }catch(error) {
-            throw error;
-        }
-    }
-    
 }
 
 
